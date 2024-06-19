@@ -1,0 +1,16 @@
+'EPIC Message Log File
+
+'Date&Time,CallerID,Message,Color
+12/06/2023 05:39:02.250,NewTCPClient,Connected to remote host 10.7.195.7:502,-16777216
+12/06/2023 09:37:50.080,NewTCPClient,Connected to remote host 10.7.195.7:502,-16777216
+12/06/2023 10:21:22.277,Shutters,New shutter matrix has been sent,-16777216
+12/06/2023 11:11:23.191,NewTCPClient,Connected to remote host 10.7.195.7:502,-16777216
+12/06/2023 12:23:31.839,Shutters,New shutter matrix has been sent,-16777216
+12/06/2023 12:51:27.146,Shutters,New shutter matrix has been sent,-16777216
+12/06/2023 15:15:10.329,Shutters,New shutter matrix has been sent,-16777216
+12/06/2023 15:18:17.445,NewTCPClient,Connected to remote host 10.7.195.7:502,-16777216
+12/06/2023 16:11:47.200,Shutters,New shutter matrix has been sent,-16777216
+12/06/2023 16:25:08.279,Shutters,New shutter matrix has been sent,-16777216
+12/06/2023 16:31:47.217,Shutters,New shutter matrix has been sent,-16777216
+12/06/2023 16:31:47.217,RecipeControl,Recipe 'Water desorpion LL' completed at 16:31:47,-16776961
+12/06/2023 17:24:18.434,NewTCPClient,Connected to remote host 10.7.195.7:502,-16777216

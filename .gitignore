@@ -6,7 +6,7 @@ __pycache__/
 #
 .~lock.*
 
-/data
+#/data
 /test/data
 .pyenv
 

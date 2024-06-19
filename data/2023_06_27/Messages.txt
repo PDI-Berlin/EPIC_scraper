@@ -1,0 +1,13 @@
+'EPIC Message Log File
+
+'Date&Time,CallerID,Message,Color#
+16/06/2023 01:40:52.961,NewTCPClient,Connected to remote host 10.7.195.7:502,-16777216
+16/06/2023 15:04:41.389,Location Tab,Mirror moved from GC to MC_manip,-16777216
+16/06/2023 15:04:48.551,Location Tab,Mirror moved from MC_manip to GC,-16777216
+16/06/2023 16:12:00.661,Location Tab,EMPTY in MC_manip status changed to: New,-16777216
+16/06/2023 16:13:06.903,Location Tab,M8abcd moved from MC_manip to GC,-16777216
+16/06/2023 16:13:44.156,Location Tab,M8abcd moved from GC to MC_manip,-16777216
+16/06/2023 16:16:41.767,Location Tab,EMPTY in MC_manip status changed to: Reset,-16777216
+16/06/2023 16:20:06.903,Location Tab,M8fghj moved from MC_manip to GC,-16777216
+16/06/2023 16:40:44.156,Location Tab,M8fghj moved from GC to MC_manip,-16777216
+16/06/2023 16:45:44.156,Location Tab,M8fghj moved from GC to MC_manip,-16777216

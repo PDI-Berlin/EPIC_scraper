@@ -1,0 +1,42 @@
+'EPIC Message Log File
+
+'Date&Time,CallerID,Message,Color
+08/06/2023 00:37:10.515,NewTCPClient,Connected to remote host 10.7.195.7:502,-16777216
+08/06/2023 01:02:48.379,NewTCPClient,Connected to remote host 10.7.195.7:502,-16777216
+08/06/2023 01:11:46.659,NewTCPClient,Connected to remote host 10.7.195.7:502,-16777216
+08/06/2023 11:32:53.567,SimToReal,Switching to Real mode...,-16776961
+08/06/2023 11:32:53.577,OpenSerialPort,COM2 port opened,-16777216
+08/06/2023 11:32:53.587,OpenSerialPort,COM1 port opened,-16777216
+08/06/2023 11:32:53.607,OpenSerialPort,COM9 port opened,-16777216
+08/06/2023 11:32:53.607,OpenSerialPort,COM3 port opened,-16777216
+08/06/2023 11:32:53.617,OpenSerialPort,COM7 port opened,-16777216
+08/06/2023 11:32:53.637,OpenSerialPort,COM6 port opened,-16777216
+08/06/2023 11:32:53.637,OpenSerialPort,COM5 port opened,-16777216
+08/06/2023 11:32:53.647,SimToReal,Switch to Real mode completed,-16744448
+08/06/2023 11:32:53.587,NewTCPClient,Connected to remote host 10.7.195.32:10001,-16777216
+08/06/2023 11:32:53.587,NewTCPClient,Connected to remote host 10.7.195.188:9005,-16777216
+08/06/2023 11:32:53.587,NewTCPClient,Connected to remote host 10.7.195.13:502,-16777216
+08/06/2023 11:32:53.607,NewTCPClient,Connected to remote host 10.7.195.188:9002,-16777216
+08/06/2023 11:32:53.617,NewTCPClient,Connected to remote host 10.7.195.2:10001,-16777216
+08/06/2023 11:32:53.627,NewTCPClient,Connected to remote host 10.7.195.3:10001,-16777216
+08/06/2023 11:32:53.627,NewTCPClient,Connected to remote host 10.7.195.4:10001,-16777216
+08/06/2023 11:32:53.627,NewTCPClient,Connected to remote host 10.7.195.14:502,-16777216
+08/06/2023 11:32:53.627,NewTCPClient,Connected to remote host 10.7.195.7:502,-16777216
+08/06/2023 11:32:53.627,NewTCPClient,Connected to remote host 10.7.195.16:502,-16777216
+08/06/2023 11:32:53.627,NewTCPClient,Connected to remote host 10.7.195.31:10001,-16777216
+08/06/2023 11:32:53.627,NewTCPClient,Connected to remote host 10.7.195.17:502,-16777216
+08/06/2023 11:32:53.627,NewTCPClient,Connected to remote host 10.7.195.110:502,-16777216
+08/06/2023 11:32:53.627,NewTCPClient,Connected to remote host 10.7.195.111:502,-16777216
+08/06/2023 11:32:53.627,NewTCPClient,Connected to remote host 10.7.195.9:502,-16777216
+08/06/2023 11:32:53.627,NewTCPClient,Connected to remote host 10.7.195.12:502,-16777216
+08/06/2023 11:32:53.637,NewTCPClient,Connected to remote host 10.7.195.188:9006,-16777216
+08/06/2023 11:32:53.637,NewTCPClient,Connected to remote host 10.7.195.188:9007,-16777216
+08/06/2023 11:32:53.647,NewTCPClient,Connected to remote host 10.7.195.5:10001,-16777216
+08/06/2023 11:32:53.647,NewTCPClient,Connected to remote host 10.7.195.112:502,-16777216
+08/06/2023 11:32:55.597,Scheduler,Ooops.. The scheduler thread just crashed. Rebooting...,-65536
+08/06/2023 11:32:55.917,Scheduler,Reboot completed.,-16744448
+08/06/2023 12:41:00.470,Shutters,New shutter matrix has been sent,-16777216
+08/06/2023 15:06:01.293,Recipe,Wait command took 181ms to exectute,-65281
+08/06/2023 15:53:28.570,Shutters,New shutter matrix has been sent,-16777216
+08/06/2023 16:05:26.562,NewTCPClient,Connected to remote host 10.7.195.7:502,-16777216
+08/06/2023 16:31:03.309,Recipe,Wait command took 267ms to exectute,-65281
