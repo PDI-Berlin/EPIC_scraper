@@ -244,6 +244,10 @@ def resampling(
 
 
 def growth_time(df):
+    """
+    This function is used to determine the number of growth events
+    and the start and end of the growth events.
+    """
     # Drop the CallID and Color columns
     df.drop(df.columns[[0, 2]], axis=1, inplace=True)
     # Check if the Message column contains the moved objects, like mirror or holder.
