@@ -1,7 +1,7 @@
 from epicfileimport.epic_module import *
 
 # date of the experiment
-date = "2023_06_27"
+date = '2023_06_27'
 
 # relative path
 data_path = 'data/'
@@ -29,7 +29,9 @@ write_method = 1
 dataframe_list = epiclog_read_batch(date, data_path)
 
 # Resampling and filtering
-dataframe_list = resampling(dataframe_list, percent_cut, value_cut, resampling_period, resample_method = 'diff')
+dataframe_list = resampling(
+    dataframe_list, percent_cut, value_cut, resampling_period, resample_method='diff'
+)
 
 # OPTIONAL: write to an *.xlsx file
 if write_method == 1:
@@ -37,4 +39,3 @@ if write_method == 1:
 else:
     single_df = epicdf_combine(dataframe_list)
     epic_xlsx_single(date, data_path, single_df)
-
