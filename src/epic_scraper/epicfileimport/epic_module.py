@@ -23,7 +23,22 @@ def epiclog_read(name):
     """
     Function to import the log files from the custom Molecular
     Beam Epitaxy program EPIC, which is used in Paul-Drude-Institut.
+
     Produces pandas DataFrame for each text file, with index as a timestamp.
+
+    Function call example:
+
+    my_dataframe = epiclog_read("myfile.txt")
+
+    my_dataframe.values will contain the data in the file.
+    my_dataframe.index will contain the timestamps.
+
+    The DataFrame inherently is a 2D structure, with rows and columns.
+
+    When parsing in a NOMAD array quantity, the dataframe must be reshaped to a 1D array.
+    This can be done by using the following code:
+
+    my_dataframe.values.ravel()
     """
     # Read log files
     df = pd.read_csv(name, skiprows=1)
