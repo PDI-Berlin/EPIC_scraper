@@ -36,7 +36,8 @@ def epiclog_read(name):
     The DataFrame inherently is a 2D structure, with rows and columns.
 
     When parsing in a NOMAD array quantity, the dataframe must be reshaped to a 1D array.
-    This can be done by using the following code:
+    This can be done by using the following code,
+    where .values.ravel() method is used to return a 1D Numpy array:
 
     my_dataframe.values.ravel()
     """
