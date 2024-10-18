@@ -17,6 +17,8 @@
 import glob
 
 import pandas as pd
+import h5py
+import numpy as np
 
 
 def epiclog_read(name):
@@ -348,3 +350,28 @@ def epic_xlsx_single(date, data_path, df):
         df.to_excel(writer, sheet_name='epic_log_data')
 
     return print('file successfully exported')
+
+
+def epic_hdf5_exporter(date, data_path, dataframe_list, start_datetime, df):
+    file_path = f'{data_path}mbe_data_{date}.h5'
+    with h5py.File(file_path, 'w') as hf:
+        for i, dataframe in enumerate(dataframe_list):
+            if dataframe.empty:
+                continue
+            if dataframe.name == 'Messages':
+                group_name = f'{dataframe.name}'
+                message = str(dataframe.values)
+                group = hf.create_group(group_name)
+                group.create_dataset('data1', data=message)
+                continue
+
+            group_name = f'{dataframe.name}'
+            group = hf.create_group(group_name)
+            group.create_dataset('data1', data=dataframe.values.ravel())
+            group.create_dataset(
+                'time',
+                data=np.array((dataframe.index - start_datetime).total_seconds()),
+            )
+            group.attrs['signal'] = 'data1'
+            group.attrs['axes'] = 'time'
+            group.attrs['NX_class'] = 'NXdata'
