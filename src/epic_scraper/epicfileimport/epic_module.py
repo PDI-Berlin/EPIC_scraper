@@ -62,10 +62,7 @@ def epiclog_read_batch(date, data_path):
     Function to import the log files in batch from a folder.
     """
     path_list = [glob.glob(e) for e in [data_path + date + '/*.txt']][0]
-    dataframe_list = [None] * len(path_list)
-
-    for i in range(len(dataframe_list)):
-        dataframe_list[i] = epiclog_read(path_list[i])
+    dataframe_list = [epiclog_read(path) for path in path_list]
 
     return dataframe_list
 
