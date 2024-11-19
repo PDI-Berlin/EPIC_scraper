@@ -1,7 +1,7 @@
-from epicfileimport.epic_module import *
+from epic_scraper.epicfileimport.epic_module import *
 
 # date of the experiment
-date = '2023_06_27'
+date = '2023_06_12'
 
 # relative path
 data_path = 'data/'

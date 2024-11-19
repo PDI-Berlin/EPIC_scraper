@@ -390,6 +390,8 @@ def extract_growth_messages(folder_path):
     """
     messages = epiclog_read(f"{folder_path}/Messages.txt")
     growth_events = growth_time(messages)
+    growth_starttime = None
+    growth_id = None
     for line in growth_events.iterrows():
         if line[1]["to"] == "GC":
             growth_id = line[1]["object"]
@@ -405,8 +407,8 @@ def extract_growth_messages(folder_path):
                 )
             except NameError:
                 return (
-                    None,
-                    None,
+                    growth_id,
+                    growth_starttime,
                     "No growth detected, check Messages.txt file for errors.",
                 )
 
