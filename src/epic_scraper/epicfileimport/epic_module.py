@@ -20,7 +20,7 @@ import pandas as pd
 import h5py
 import numpy as np
 
-timezone = "Europe/Berlin"
+timezone = 'Europe/Berlin'
 
 
 def epiclog_read(name):
@@ -50,28 +50,28 @@ def epiclog_read(name):
 
     # Replaces dots, backticks and spaces with underscores.
     df.columns = (
-        df.columns.str.replace("[']", "", regex=True)
-        .str.replace("[.]", "_", regex=True)
-        .str.replace("[ ]", "_", regex=True)
+        df.columns.str.replace("[']", '', regex=True)
+        .str.replace('[.]', '_', regex=True)
+        .str.replace('[ ]', '_', regex=True)
     )
 
     # Converting columns named 'Date&Time' to 'Date',
     # as it is inconsistent between different log files.
-    if "Date&Time" in df.columns:
-        df = df.rename({"Date&Time": "Date"}, axis="columns")
+    if 'Date&Time' in df.columns:
+        df = df.rename({'Date&Time': 'Date'}, axis='columns')
 
     # Converting column 'Date' to timestamp
     df.Date = pd.to_datetime(df.Date, dayfirst=True)
 
     # Using timestamp as index, resampling by time requires DateTimeIndex.
-    df.index = df["Date"]
-    df = df.drop(columns="Date")
+    df.index = df['Date']
+    df = df.drop(columns='Date')
 
     # Add comment and name attributes to the DataFrame from log files
     # and replace dots and spaces with underscores.
-    df.comment = open(name).readlines()[0][1:].replace(".", "_")
+    df.comment = open(name).readlines()[0][1:].replace('.', '_')
     df.name = (
-        name.replace(".txt", "").replace(".", "_").replace(" ", "_").split("/")[-1]
+        name.replace('.txt', '').replace('.', '_').replace(' ', '_').split('/')[-1]
     )
 
     return df
@@ -81,8 +81,8 @@ def epiclog_read_batch(date, data_path):
     """
     Function to import the log files in batch from a folder.
     """
-    path_list = glob.glob(f"{data_path}{date}/*.txt")
-    excluded_files = {"Messages.txt", "Shutters.txt", "Fitting.txt"}
+    path_list = glob.glob(f'{data_path}{date}/*.txt')
+    excluded_files = {'Messages.txt', 'Shutters.txt', 'Fitting.txt'}
 
     dataframe_list = [
         epiclog_read(path)
@@ -109,17 +109,17 @@ def threshold_sampling(df, change, threshold_value=0.01):
     # .loc[(df[i]!=0).any(axis=1)]
     # If you want to drop the NaN value row (which, the first value will also be)
     # add .dropna() to line just below.
-    if change == "relative":
+    if change == 'relative':
         df = (
-            pd.merge(df.reset_index(), df.pct_change().reset_index(), on=["Date"])
-            .set_index("Date")
+            pd.merge(df.reset_index(), df.pct_change().reset_index(), on=['Date'])
+            .set_index('Date')
             .loc[(df.pct_change() != 0).any(axis=1)]
             .fillna(threshold_value + 1)
         )
     else:
         df = (
-            pd.merge(df.reset_index(), df.diff().reset_index(), on=["Date"])
-            .set_index("Date")
+            pd.merge(df.reset_index(), df.diff().reset_index(), on=['Date'])
+            .set_index('Date')
             .loc[(df.diff() != 0).any(axis=1)]
             .fillna(threshold_value + 1)
         )
@@ -131,7 +131,7 @@ def threshold_sampling(df, change, threshold_value=0.01):
     # after the merge function, the data column and the difference column are named as
     # NAME_x and NAME_y respectively, as difference column is dropped, there is no need
     # to keep the _x suffix in the end NAME.
-    df.columns = df.columns.str.replace("_x", "", regex=True)
+    df.columns = df.columns.str.replace('_x', '', regex=True)
     return df
 
 
@@ -164,7 +164,7 @@ def accumulated_sampling(df, change, threshold_value):
         # function with a relatively low threshold_value chosen(like default option of
         # 0.01).
         for j in range(len(df)):
-            if change == "relative":
+            if change == 'relative':
                 condition = (
                     abs(
                         pd.Series(
@@ -181,20 +181,20 @@ def accumulated_sampling(df, change, threshold_value):
                 dataframe_change = pd.concat([dataframe_change, df.iloc[[j]]])
         # Add the suffix _change to dataframe_change column to differentiate with
         # the column of df with the same name.
-        dataframe_change = dataframe_change.add_suffix("_change")
+        dataframe_change = dataframe_change.add_suffix('_change')
         # merge dataframe_change to df
         df = df.join(dataframe_change)
         # delete original df column
         df = df.drop(columns=df.iloc[:, :1].columns.tolist())
         #  delete the suffix _change
-        df.columns = df.columns.str.replace("_change", "", regex=True)
+        df.columns = df.columns.str.replace('_change', '', regex=True)
         # drop the empty data points.
         df = df.dropna(axis=0)
     return df
 
 
 def resampling(
-    dataframe_list, percent_cut, value_cut, resampling_period, resample_method="diff"
+    dataframe_list, percent_cut, value_cut, resampling_period, resample_method='diff'
 ):
     """
     This DataFrame are resampled either with time intervals
@@ -207,7 +207,7 @@ def resampling(
         comment_list[i] = dataframe_list[i].comment
         name_list[i] = dataframe_list[i].name
         # Resampling, either over DateTime or Relative/Absolute Change
-        if resample_method == "diff":
+        if resample_method == 'diff':
             # Only resize data texts(Date and additional column),
             # effectively leave out Messages and Shutter out.
             if dataframe_list[i].columns.size < 3:
@@ -216,31 +216,31 @@ def resampling(
                 # DataFrame only with values over certain threshold percentages.
                 # Search columns with the name inside 'IG', 'MIG' or 'PG' which gives
                 # pressure related log data.
-                if dataframe_list[i].filter(regex="IG|MIG|PG").columns.values.tolist():
+                if dataframe_list[i].filter(regex='IG|MIG|PG').columns.values.tolist():
                     dataframe_list[i] = threshold_sampling(
-                        dataframe_list[i], "relative"
+                        dataframe_list[i], 'relative'
                     )
                     dataframe_list[i] = accumulated_sampling(
-                        dataframe_list[i], "relative", percent_cut
+                        dataframe_list[i], 'relative', percent_cut
                     )
 
                 # Search for temperature related log files and create new DataFrame by using
                 # absolute change (dataframe.diff()) to fill a newly created DataFrame
                 # only with values over certain threshold value. Search columns with the
                 # name inside 'PID' or 'Pyro' which gives temperature related log data.
-                if dataframe_list[i].filter(regex="PID|Pyro").columns.values.tolist():
+                if dataframe_list[i].filter(regex='PID|Pyro').columns.values.tolist():
                     dataframe_list[i] = threshold_sampling(
-                        dataframe_list[i], "absolute"
+                        dataframe_list[i], 'absolute'
                     )
                     dataframe_list[i] = accumulated_sampling(
-                        dataframe_list[i], "absolute", value_cut
+                        dataframe_list[i], 'absolute', value_cut
                     )
         else:
             # resample by time to reduce the size of data arrays,
             # otherwise the dataframe combined becomes too big for the memory.
 
             if dataframe_list[i].columns.size == 3:
-                agg_rules = {"CallerID": "last", "Message": "last", "Color": "last"}
+                agg_rules = {'CallerID': 'last', 'Message': 'last', 'Color': 'last'}
                 dataframe_list[i] = (
                     dataframe_list[i].resample(resampling_period).agg(agg_rules)
                 )
@@ -249,16 +249,16 @@ def resampling(
             else:
                 dataframe_list[i] = dataframe_list[i].resample(resampling_period).mean()
             # Fill the empty rows of Shutter DataFrame
-            if name_list[i] == "Shutters":
-                dataframe_list[i].fillna(method="ffill", inplace=True)
+            if name_list[i] == 'Shutters':
+                dataframe_list[i].fillna(method='ffill', inplace=True)
 
         # Split the Message column to object, from and to columns
-        if dataframe_list[i].filter(regex="Message").columns.values.tolist():
+        if dataframe_list[i].filter(regex='Message').columns.values.tolist():
             dataframe_list[i] = growth_time(dataframe_list[i])
         else:
             dataframe_list[
                 -1
-            ].grow = "Error: No Message log detected, can not determine the number of growth events and the start and end of the growth!"
+            ].grow = 'Error: No Message log detected, can not determine the number of growth events and the start and end of the growth!'
             print(dataframe_list[-1].grow)
 
         # have re-run this again, metadata is lost after df = df methods
@@ -277,28 +277,28 @@ def growth_time(df):
     # Drop the CallID and Color columns
     df.drop(df.columns[[0, 2]], axis=1, inplace=True)
     # Check if the Message column contains the moved objects, like mirror or holder.
-    if df["Message"].str.contains("moved from").any() == True:
+    if df['Message'].str.contains('moved from').any() == True:
         # Filter the rows that contain the moved from message
-        df = df[df["Message"].str.contains("moved from")]
+        df = df[df['Message'].str.contains('moved from')]
         # Drop the rows that contain the Mirror, effectively only the holder is left.
-        df = df[~df["Message"].str.contains("Mirror")]
+        df = df[~df['Message'].str.contains('Mirror')]
         # When the Mirror values dropped, the DataFrame can be empty(No growth detected)
         # Check this to prevent errors.
         if df.empty != True:
             # Split the Message column to Object, From and to Columns
-            df[["object", "from"]] = df.pop("Message").str.split(
-                " moved from ", expand=True
+            df[['object', 'from']] = df.pop('Message').str.split(
+                ' moved from ', expand=True
             )
-            df[["from", "to"]] = df.pop("from").str.split(" to ", expand=True)
-            if any(count != 2 for count in df["object"].value_counts()):
-                if any(count > 1 for count in df["object"].value_counts()):
-                    df.grow = "Error: You use the same name for different growth events! Please use unique names for each growth event."
+            df[['from', 'to']] = df.pop('from').str.split(' to ', expand=True)
+            if any(count != 2 for count in df['object'].value_counts()):
+                if any(count > 1 for count in df['object'].value_counts()):
+                    df.grow = 'Error: You use the same name for different growth events! Please use unique names for each growth event.'
                 else:
                     # in here there needs to be a check again for the case if for the
                     # given growth event, in the from column GC comes before
                     # MC_manip, a growth started in previous day, vice versa means
                     # a growth started today and still going on.
-                    df.grow = "The number of growth events is not equal to the number of start and end of the growth events!"
+                    df.grow = 'The number of growth events is not equal to the number of start and end of the growth events!'
             else:
                 # in here there needs to be a check again for the case if for the given
                 # growth event, in the from column GC comes before
@@ -307,37 +307,37 @@ def growth_time(df):
                 # and the it is done today and user tries to start a new growth
                 # event today with the same name.
                 if len(df.index) == 2:
-                    df.grow = "Single Growth detected."
+                    df.grow = 'Single Growth detected.'
                     print(
-                        "Start of the Growth: "
-                        + df.index[0].strftime("%Y-%m-%d %H:%M:%S")
+                        'Start of the Growth: '
+                        + df.index[0].strftime('%Y-%m-%d %H:%M:%S')
                     )
                     print(
-                        "End of the Growth: "
-                        + df.index[-1].strftime("%Y-%m-%d %H:%M:%S")
+                        'End of the Growth: '
+                        + df.index[-1].strftime('%Y-%m-%d %H:%M:%S')
                     )
                 if len(df.index) % 2 == 0:
                     df.grow = (
-                        str(df["object"].value_counts()[0])
-                        + " growths detected with the names "
-                        + ",".join(df["object"].value_counts().index.values.tolist())
-                        + "."
+                        str(df['object'].value_counts()[0])
+                        + ' growths detected with the names '
+                        + ','.join(df['object'].value_counts().index.values.tolist())
+                        + '.'
                     )
                     for i in range(0, len(df.index), 2):
                         print(
-                            "Start of the Growth "
+                            'Start of the Growth '
                             + df.iloc[i, 0]
-                            + ":"
-                            + df.index[i].strftime("%Y-%m-%d %H:%M:%S")
+                            + ':'
+                            + df.index[i].strftime('%Y-%m-%d %H:%M:%S')
                         )
                         print(
-                            "End of the Growth "
+                            'End of the Growth '
                             + df.iloc[i + 1, 0]
-                            + ":"
-                            + df.index[i + 1].strftime("%Y-%m-%d %H:%M:%S")
+                            + ':'
+                            + df.index[i + 1].strftime('%Y-%m-%d %H:%M:%S')
                         )
         else:
-            df.grow = "No growth detected."
+            df.grow = 'No growth detected.'
     print(df.grow)
     return df
 
@@ -346,11 +346,11 @@ def epic_xlsx(date, data_path, dataframe_list):
     """
     Export DataFrame to single sheets in a single *.xlsx file
     """
-    with pd.ExcelWriter(data_path + "mbe_data_" + date + ".xlsx") as writer:
+    with pd.ExcelWriter(data_path + 'mbe_data_' + date + '.xlsx') as writer:
         for i in range(len(dataframe_list)):
             dataframe_list[i].to_excel(writer, sheet_name=dataframe_list[i].name)
 
-    return print("file successfully exported")
+    return print('file successfully exported')
 
 
 def epicdf_combine(dataframe_list):
@@ -359,7 +359,7 @@ def epicdf_combine(dataframe_list):
     """
     df = dataframe_list[0]
     for i in range(len(dataframe_list[1:])):
-        df = pd.merge(df, dataframe_list[1:][i], on="Date", how="outer")
+        df = pd.merge(df, dataframe_list[1:][i], on='Date', how='outer')
 
     return df
 
@@ -370,10 +370,10 @@ def epic_xlsx_single(date, data_path, df):
     Sheet_name must be used with a string like 'epic_log_data',
     df.name does not work.
     """
-    with pd.ExcelWriter(data_path + "mbe_data_" + date + ".xlsx") as writer:
-        df.to_excel(writer, sheet_name="epic_log_data")
+    with pd.ExcelWriter(data_path + 'mbe_data_' + date + '.xlsx') as writer:
+        df.to_excel(writer, sheet_name='epic_log_data')
 
-    return print("file successfully exported")
+    return print('file successfully exported')
 
 
 def extract_growth_messages(folder_path):
@@ -388,28 +388,28 @@ def extract_growth_messages(folder_path):
     growth_starttime (datetime): The start datetime of the growth process.
     log_message (str): A log message indicating the start and end of the growth process.
     """
-    messages = epiclog_read(f"{folder_path}/Messages.txt")
+    messages = epiclog_read(f'{folder_path}/Messages.txt')
     growth_events = growth_time(messages)
     growth_starttime = None
     growth_id = None
     for line in growth_events.iterrows():
-        if line[1]["to"] == "GC":
-            growth_id = line[1]["object"]
+        if line[1]['to'] == 'GC':
+            growth_id = line[1]['object']
             growth_starttime = line[0].tz_localize(timezone)
-        if line[1]["from"] == "GC":
+        if line[1]['from'] == 'GC':
             try:
                 growth_endtime = line[0].tz_localize(timezone)
                 growth_duration = growth_endtime - growth_starttime
                 return (
                     growth_id,
                     growth_starttime,
-                    f"Detected growth of {growth_id} started at {growth_starttime} and ended at {growth_endtime} with a duration of {growth_duration}",
+                    f'Detected growth of {growth_id} started at {growth_starttime} and ended at {growth_endtime} with a duration of {growth_duration}',
                 )
             except NameError:
                 return (
                     growth_id,
                     growth_starttime,
-                    "No growth detected, check Messages.txt file for errors.",
+                    'No growth detected, check Messages.txt file for errors.',
                 )
 
 
@@ -429,32 +429,32 @@ def epic_hdf5_exporter(hdf_file, dataframe_list, start_datetime):
     Returns:
     None
     """
-    with h5py.File(hdf_file, "w") as hdf:
+    with h5py.File(hdf_file, 'w') as hdf:
         for _, dataframe in enumerate(dataframe_list):
             if dataframe is None:
                 continue
             if dataframe.empty:
                 continue
-            if dataframe.name in ["Shutters", "Fitting"]:
+            if dataframe.name in ['Shutters', 'Fitting']:
                 continue
-            if dataframe.name == "Messages":
-                group_name = f"{dataframe.name}"
+            if dataframe.name == 'Messages':
+                group_name = f'{dataframe.name}'
                 message = str(dataframe.values)
                 group = hdf.create_group(group_name)
-                group.create_dataset("value", data=message)
+                group.create_dataset('value', data=message)
                 continue
 
-            group_name = f"{dataframe.name}"
+            group_name = f'{dataframe.name}'
             group = hdf.create_group(group_name)
-            group.create_dataset("value", data=dataframe.values.ravel())
+            group.create_dataset('value', data=dataframe.values.ravel())
             group.create_dataset(
-                "time",
+                'time',
                 data=np.array(
                     (
                         dataframe.index.tz_localize(timezone) - start_datetime
                     ).total_seconds()
                 ),
             )
-            group.attrs["signal"] = "value"
-            group.attrs["axes"] = "time"
-            group.attrs["NX_class"] = "NXdata"
+            group.attrs['signal'] = 'value'
+            group.attrs['axes'] = 'time'
+            group.attrs['NX_class'] = 'NXdata'
