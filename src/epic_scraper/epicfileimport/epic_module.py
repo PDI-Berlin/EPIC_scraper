@@ -376,7 +376,7 @@ def epic_xlsx_single(date, data_path, df):
     return print('file successfully exported')
 
 
-def extract_growth_messages(folder_path):
+def extract_growth_messages(folder_path, message_filename):
     """
     This function is used to extract the growth parameters from the Messages.txt file.
 
@@ -388,9 +388,11 @@ def extract_growth_messages(folder_path):
     growth_starttime (datetime): The start datetime of the growth process.
     log_message (str): A log message indicating the start and end of the growth process.
     """
-    messages = epiclog_read(f'{folder_path}/Messages.txt')
+    messages = epiclog_read(f'{folder_path}/{message_filename}')
     growth_events = growth_time(messages)
     growth_starttime = None
+    growth_endtime = None
+    growth_duration = None
     growth_id = None
     for line in growth_events.iterrows():
         if line[1]['to'] == 'GC':
@@ -403,12 +405,16 @@ def extract_growth_messages(folder_path):
                 return (
                     growth_id,
                     growth_starttime,
+                    growth_endtime,
+                    growth_duration,
                     f'Detected growth of {growth_id} started at {growth_starttime} and ended at {growth_endtime} with a duration of {growth_duration}',
                 )
             except NameError:
                 return (
                     growth_id,
                     growth_starttime,
+                    growth_endtime,
+                    growth_duration,
                     'No growth detected, check Messages.txt file for errors.',
                 )
 
