@@ -35,7 +35,7 @@ def filename_2_dataframename(filename):
     """
     if isinstance(filename, str):
         return filename.strip().replace(' ', '_').replace('.', '_')
-    elif isinstance(filename, pd.Series):
+    if isinstance(filename, pd.Series):
         return filename[0].strip().replace(' ', '_').replace('.', '_')
 
 
@@ -86,7 +86,9 @@ def epiclog_read(name):
     # Add comment and name attributes to the DataFrame from log files
     # and replace dots and spaces with underscores.
     df.comment = open(name).readlines()[0][1:].replace('.', '_')
-    df.name = filename_2_dataframename.replace('.txt', '').split('/')[-1]
+    df.name = (
+        str(filename_2_dataframename).replace('.txt', '').rsplit('/', maxsplit=1)[-1]
+    )
 
     return df
 
