@@ -34,9 +34,12 @@ def filename_2_dataframename(filename):
     the filenames to be cleaned are found in the excel config file.
     """
     if isinstance(filename, str):
-        return filename.strip().replace(' ', '_').replace('.', '_')
+        return filename.strip().replace('.txt', '').replace(' ', '_').replace('.', '_')
     if isinstance(filename, pd.Series):
-        return filename[0].strip().replace(' ', '_').replace('.', '_')
+        return (
+            filename[0].strip().replace('.txt', '').replace(' ', '_').replace('.', '_')
+        )
+    return None
 
 
 def epiclog_read(name):
@@ -86,9 +89,7 @@ def epiclog_read(name):
     # Add comment and name attributes to the DataFrame from log files
     # and replace dots and spaces with underscores.
     df.comment = open(name).readlines()[0][1:].replace('.', '_')
-    df.name = (
-        str(filename_2_dataframename).replace('.txt', '').rsplit('/', maxsplit=1)[-1]
-    )
+    df.name = filename_2_dataframename(name).rsplit('/', maxsplit=1)[-1]
 
     return df
 
