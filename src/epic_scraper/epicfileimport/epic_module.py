@@ -25,11 +25,18 @@ timezone = 'Europe/Berlin'
 
 def filename_2_dataframename(filename):
     """
-    This function is used to convert the filename to a DataFrame name.
+    Utility function used to clean the filenames of the epic log files.
+    After cleaning, the filenames are used as the names of the DataFrames.
 
-    Note: it is also used in the pdi-nomad-plugin.
+    This function can handle both strings and pandas Series.
+
+    Note: it is also used in the pdi-nomad-plugin:
+    the filenames to be cleaned are found in the excel config file.
     """
-    return filename.replace('.txt', '').replace('.', '_').replace(' ', '_')
+    if isinstance(filename, str):
+        return filename.strip().replace(' ', '_').replace('.', '_')
+    elif isinstance(filename, pd.Series):
+        return filename[0].strip().replace(' ', '_').replace('.', '_')
 
 
 def epiclog_read(name):
@@ -79,7 +86,7 @@ def epiclog_read(name):
     # Add comment and name attributes to the DataFrame from log files
     # and replace dots and spaces with underscores.
     df.comment = open(name).readlines()[0][1:].replace('.', '_')
-    df.name = filename_2_dataframename.split('/')[-1]
+    df.name = filename_2_dataframename.replace('.txt', '').split('/')[-1]
 
     return df
 
