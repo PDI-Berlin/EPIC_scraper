@@ -23,6 +23,15 @@ import numpy as np
 timezone = 'Europe/Berlin'
 
 
+def filename_2_dataframename(filename):
+    """
+    This function is used to convert the filename to a DataFrame name.
+
+    Note: it is also used in the pdi-nomad-plugin.
+    """
+    return filename.replace('.txt', '').replace('.', '_').replace(' ', '_')
+
+
 def epiclog_read(name):
     """
     Function to import the log files from the custom Molecular
@@ -70,9 +79,7 @@ def epiclog_read(name):
     # Add comment and name attributes to the DataFrame from log files
     # and replace dots and spaces with underscores.
     df.comment = open(name).readlines()[0][1:].replace('.', '_')
-    df.name = (
-        name.replace('.txt', '').replace('.', '_').replace(' ', '_').split('/')[-1]
-    )
+    df.name = filename_2_dataframename.split('/')[-1]
 
     return df
 
