@@ -23,6 +23,25 @@ import numpy as np
 timezone = 'Europe/Berlin'
 
 
+def filename_2_dataframename(filename):
+    """
+    Utility function used to clean the filenames of the epic log files.
+    After cleaning, the filenames are used as the names of the DataFrames.
+
+    This function can handle both strings and pandas Series.
+
+    Note: it is also used in the pdi-nomad-plugin:
+    the filenames to be cleaned are found in the excel config file.
+    """
+    if isinstance(filename, str):
+        return filename.strip().replace('.txt', '').replace(' ', '_').replace('.', '_')
+    if isinstance(filename, pd.Series):
+        return (
+            filename[0].strip().replace('.txt', '').replace(' ', '_').replace('.', '_')
+        )
+    return None
+
+
 def epiclog_read(name):
     """
     Function to import the log files from the custom Molecular
@@ -70,9 +89,7 @@ def epiclog_read(name):
     # Add comment and name attributes to the DataFrame from log files
     # and replace dots and spaces with underscores.
     df.comment = open(name).readlines()[0][1:].replace('.', '_')
-    df.name = (
-        name.replace('.txt', '').replace('.', '_').replace(' ', '_').split('/')[-1]
-    )
+    df.name = filename_2_dataframename(name).rsplit('/', maxsplit=1)[-1]
 
     return df
 
