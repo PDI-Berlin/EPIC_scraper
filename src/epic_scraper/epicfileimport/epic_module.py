@@ -37,7 +37,11 @@ def filename_2_dataframename(filename):
         return filename.strip().replace('.txt', '').replace(' ', '_').replace('.', '_')
     if isinstance(filename, pd.Series):
         return (
-            filename[0].strip().replace('.txt', '').replace(' ', '_').replace('.', '_')
+            str(filename[0])
+            .strip()
+            .replace('.txt', '')
+            .replace(' ', '_')
+            .replace('.', '_')
         )
     return None
 
