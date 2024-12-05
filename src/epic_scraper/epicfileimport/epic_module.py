@@ -359,6 +359,8 @@ def growth_time(df):
                         )
         else:
             df.grow = 'No growth detected.'
+    else:
+        df.grow = "Warning: No object is moved to/from chamber, can not determine the number of growth events and/or the start and end of the growth!"
     print(df.grow)
     return df
 
