@@ -1,3 +1,12 @@
+[build-system]
+requires = [
+    "setuptools>=61.0.0",
+    "setuptools-scm>=8.0",
+]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+
 [project]
 classifiers = [
     "Intended Audience :: Developers",
