@@ -484,6 +484,10 @@ def epic_hdf5_exporter(hdf_file, dataframe_list, start_datetime):
                     ).total_seconds()
                 ),
             )
+            tstamp = dataframe.index.tz_localize(timezone)
+            group.create_dataset('timestamp', 
+                                 data=tstamp.strftime('%Y-%m-%d %H:%M:%S.%f').tolist()
+                                 )
             group.attrs['signal'] = 'value'
             group.attrs['axes'] = 'time'
             group.attrs['NX_class'] = 'NXdata'
