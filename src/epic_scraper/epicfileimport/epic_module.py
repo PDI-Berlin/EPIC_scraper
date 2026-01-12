@@ -337,9 +337,9 @@ def growth_time(df):
                         'End of the Growth: '
                         + df.index[-1].strftime('%Y-%m-%d %H:%M:%S')
                     )
-                if len(df.index) % 2 == 0:
+                if len(df.index) > 0 and len(df.index) % 2 == 0:
                     df.grow = (
-                        str(df['object'].value_counts()[0])
+                        str(df['object'].value_counts().iloc[0])
                         + ' growths detected with the names '
                         + ','.join(df['object'].value_counts().index.values.tolist())
                         + '.'
